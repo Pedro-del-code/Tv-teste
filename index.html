@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Controle Remoto Web</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Tela de configuração -->
+  <div id="setup-screen" class="screen">
+    <div class="setup-card">
+      <h1 class="logo">REMOTE<span>WEB</span></h1>
+      <p class="setup-sub">Controle sua Smart TV pelo navegador</p>
+
+      <label class="field-label" for="tv-brand">Marca da TV</label>
+      <select id="tv-brand" class="field-input">
+        <option value="roku">Roku / TV com Roku TV</option>
+        <option value="samsung">Samsung (Tizen)</option>
+        <option value="lg">LG (webOS)</option>
+        <option value="androidtv">Android TV / Google TV</option>
+      </select>
+
+      <label class="field-label" for="tv-ip">IP local da TV</label>
+      <input id="tv-ip" class="field-input" type="text" inputmode="decimal" placeholder="Ex: 192.168.0.15" autocomplete="off">
+
+      <button id="btn-connect" class="btn-primary">Conectar</button>
+
+      <button id="btn-help" class="btn-link">Como encontro o IP da minha TV?</button>
+
+      <div id="help-box" class="help-box hidden">
+        <p><strong>Roku:</strong> Configurações → Rede → Sobre.</p>
+        <p><strong>Samsung:</strong> Configurações → Geral → Rede → Status da Rede.</p>
+        <p><strong>LG:</strong> Configurações → Conexão → Wi-Fi (ícone de engrenagem na rede conectada).</p>
+        <p><strong>Android TV:</strong> Configurações → Rede e Internet.</p>
+        <p class="help-warn">A TV e o celular/computador precisam estar na <strong>mesma rede Wi-Fi</strong>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Controle remoto -->
+  <div id="remote-screen" class="screen hidden">
+
+    <div class="remote-body">
+
+      <!-- Display tipo LED -->
+      <div class="led-strip">
+        <button id="btn-back-setup" class="led-btn" title="Trocar TV">⚙</button>
+        <div class="led-readout">
+          <span id="device-name">—</span>
+          <span id="conn-dot" class="conn-dot"></span>
+        </div>
+        <button id="btn-info" class="led-btn" title="Info">ⓘ</button>
+      </div>
+
+      <!-- Power e Mudo -->
+      <div class="row row-power">
+        <button class="key key-power" data-key="Power" title="Ligar/Desligar">⏻</button>
+        <button class="key key-source" data-key="InputHDMI1" title="Fonte HDMI">HDMI</button>
+        <button class="key key-mute" data-key="VolumeMute" title="Mudo">🔇</button>
+      </div>
+
+      <!-- Navegação por voz / busca (placeholder de teclado) -->
+      <div class="row row-nav-extra">
+        <button class="key key-pill" data-key="Back" title="Voltar">◄ Voltar</button>
+        <button class="key key-pill" data-key="Home" title="Início">⌂ Início</button>
+      </div>
+
+      <!-- D-Pad -->
+      <div class="dpad">
+        <button class="dpad-btn dpad-up" data-key="Up">▲</button>
+        <button class="dpad-btn dpad-left" data-key="Left">◄</button>
+        <button class="dpad-btn dpad-ok" data-key="Select">OK</button>
+        <button class="dpad-btn dpad-right" data-key="Right">►</button>
+        <button class="dpad-btn dpad-down" data-key="Down">▼</button>
+      </div>
+
+      <!-- Voltar / Menu -->
+      <div class="row row-nav-extra">
+        <button class="key key-pill" data-key="InstantReplay" title="Repetir">↺ Repetir</button>
+        <button class="key key-pill" data-key="Info" title="Opções">☰ Opções</button>
+      </div>
+
+      <!-- Volume e Canal -->
+      <div class="row row-rockers">
+        <div class="rocker">
+          <span class="rocker-label">VOL</span>
+          <button class="rocker-btn" data-key="VolumeUp">+</button>
+          <button class="rocker-btn" data-key="VolumeDown">−</button>
+        </div>
+        <div class="rocker">
+          <span class="rocker-label">CH</span>
+          <button class="rocker-btn" data-key="ChannelUp">+</button>
+          <button class="rocker-btn" data-key="ChannelDown">−</button>
+        </div>
+      </div>
+
+      <!-- Playback -->
+      <div class="row row-playback">
+        <button class="key key-small" data-key="Rev">⏪</button>
+        <button class="key key-small" data-key="Play">⏯</button>
+        <button class="key key-small" data-key="Fwd">⏩</button>
+      </div>
+
+      <!-- Apps -->
+      <div class="row row-apps">
+        <button class="app-btn app-netflix" data-launch="12">Netflix</button>
+        <button class="app-btn app-youtube" data-launch="837">YouTube</button>
+        <button class="app-btn app-prime" data-launch="13">Prime Video</button>
+        <button class="app-btn app-disney" data-launch="291097">Disney+</button>
+      </div>
+
+      <!-- Teclado numérico -->
+      <button id="toggle-keypad" class="btn-link keypad-toggle">Mostrar teclado numérico ▾</button>
+      <div id="keypad" class="keypad hidden">
+        <button class="key-num" data-key="Lit_1">1</button>
+        <button class="key-num" data-key="Lit_2">2</button>
+        <button class="key-num" data-key="Lit_3">3</button>
+        <button class="key-num" data-key="Lit_4">4</button>
+        <button class="key-num" data-key="Lit_5">5</button>
+        <button class="key-num" data-key="Lit_6">6</button>
+        <button class="key-num" data-key="Lit_7">7</button>
+        <button class="key-num" data-key="Lit_8">8</button>
+        <button class="key-num" data-key="Lit_9">9</button>
+        <button class="key-num" data-key="Lit_*">*</button>
+        <button class="key-num" data-key="Lit_0">0</button>
+        <button class="key-num" data-key="Backspace">⌫</button>
+      </div>
+
+    </div>
+
+    <p id="toast" class="toast hidden"></p>
+    <p class="footnote">Funciona melhor com TVs Roku. Veja o aviso de compatibilidade abaixo.</p>
+
+    <details class="compat">
+      <summary>Aviso de compatibilidade</summary>
+      <p>Este app envia comandos reais via <strong>Roku ECP</strong> (protocolo oficial da Roku) diretamente do
+      seu navegador para o IP local da TV — sem precisar de servidor intermediário.</p>
+      <p>Para <strong>Samsung, LG e Android TV</strong>, o protocolo exige pareamento por WebSocket com token de
+      autenticação exclusivo de cada fabricante. O app tenta a conexão, mas nem toda TV/rede permite isso a
+      partir de um site em HTTPS (bloqueio de "conteúdo misto" do navegador).</p>
+      <p>Se os botões não responderem: acesse o site como <strong>http://</strong> em vez de
+      <strong>https://</strong>, ou abra as configurações do site no navegador e permita "conteúdo não seguro".</p>
+    </details>
+
+  </div>
+
+<script src="script.js"></script>
+</body>
+</html>

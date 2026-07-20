@@ -1,0 +1,15 @@
+{
+  "name": "controle-remoto-web",
+  "version": "1.0.0",
+  "description": "Controle remoto para Smart TV via navegador (Roku ECP e outros)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

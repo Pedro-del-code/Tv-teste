@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: controle-remoto-web
+    env: static
+    buildCommand: ""
+    staticPublishPath: ./
+    pullRequestPreviewsEnabled: false
