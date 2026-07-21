@@ -14,26 +14,35 @@
       <h1 class="logo">REMOTE<span>WEB</span></h1>
       <p class="setup-sub">Controle sua Smart TV pelo navegador</p>
 
-      <label class="field-label" for="tv-brand">Marca da TV</label>
+      <label class="field-label" for="tv-brand">Marca / plataforma da TV</label>
       <select id="tv-brand" class="field-input">
+        <option value="androidtv">Android TV / Google TV (genérico)</option>
+        <option value="sony">Sony Bravia (Android TV)</option>
         <option value="roku">Roku / TV com Roku TV</option>
         <option value="samsung">Samsung (Tizen)</option>
         <option value="lg">LG (webOS)</option>
-        <option value="androidtv">Android TV / Google TV</option>
       </select>
+
+      <div id="cap-badge" class="cap-badge"></div>
 
       <label class="field-label" for="tv-ip">IP local da TV</label>
       <input id="tv-ip" class="field-input" type="text" inputmode="decimal" placeholder="Ex: 192.168.0.15" autocomplete="off">
+
+      <div id="psk-group" class="hidden">
+        <label class="field-label" for="tv-psk">Chave PSK (Sony &gt; Rede &gt; IP Control)</label>
+        <input id="tv-psk" class="field-input" type="text" placeholder="Ex: 0000" autocomplete="off">
+      </div>
 
       <button id="btn-connect" class="btn-primary">Conectar</button>
 
       <button id="btn-help" class="btn-link">Como encontro o IP da minha TV?</button>
 
       <div id="help-box" class="help-box hidden">
+        <p><strong>Android TV / Google TV:</strong> Configurações → Rede e Internet → veja o IP conectado.</p>
+        <p><strong>Sony Bravia:</strong> Configurações → Rede → Config. de rede doméstica → Controle IP → defina Autenticação como "Normal e Chave Pré-Compartilhada" e crie uma PSK (ex: 0000). O IP fica na mesma tela de Rede.</p>
         <p><strong>Roku:</strong> Configurações → Rede → Sobre.</p>
         <p><strong>Samsung:</strong> Configurações → Geral → Rede → Status da Rede.</p>
         <p><strong>LG:</strong> Configurações → Conexão → Wi-Fi (ícone de engrenagem na rede conectada).</p>
-        <p><strong>Android TV:</strong> Configurações → Rede e Internet.</p>
         <p class="help-warn">A TV e o celular/computador precisam estar na <strong>mesma rede Wi-Fi</strong>.</p>
       </div>
     </div>
@@ -55,20 +64,20 @@
       </div>
 
       <!-- Power e Mudo -->
-      <div class="row row-power">
+      <div class="row row-power ctrl-full">
         <button class="key key-power" data-key="Power" title="Ligar/Desligar">⏻</button>
         <button class="key key-source" data-key="InputHDMI1" title="Fonte HDMI">HDMI</button>
         <button class="key key-mute" data-key="VolumeMute" title="Mudo">🔇</button>
       </div>
 
       <!-- Navegação por voz / busca (placeholder de teclado) -->
-      <div class="row row-nav-extra">
+      <div class="row row-nav-extra ctrl-full">
         <button class="key key-pill" data-key="Back" title="Voltar">◄ Voltar</button>
         <button class="key key-pill" data-key="Home" title="Início">⌂ Início</button>
       </div>
 
       <!-- D-Pad -->
-      <div class="dpad">
+      <div class="dpad ctrl-full">
         <button class="dpad-btn dpad-up" data-key="Up">▲</button>
         <button class="dpad-btn dpad-left" data-key="Left">◄</button>
         <button class="dpad-btn dpad-ok" data-key="Select">OK</button>
@@ -77,13 +86,13 @@
       </div>
 
       <!-- Voltar / Menu -->
-      <div class="row row-nav-extra">
+      <div class="row row-nav-extra ctrl-full">
         <button class="key key-pill" data-key="InstantReplay" title="Repetir">↺ Repetir</button>
         <button class="key key-pill" data-key="Info" title="Opções">☰ Opções</button>
       </div>
 
       <!-- Volume e Canal -->
-      <div class="row row-rockers">
+      <div class="row row-rockers ctrl-full">
         <div class="rocker">
           <span class="rocker-label">VOL</span>
           <button class="rocker-btn" data-key="VolumeUp">+</button>
@@ -97,7 +106,7 @@
       </div>
 
       <!-- Playback -->
-      <div class="row row-playback">
+      <div class="row row-playback ctrl-full">
         <button class="key key-small" data-key="Rev">⏪</button>
         <button class="key key-small" data-key="Play">⏯</button>
         <button class="key key-small" data-key="Fwd">⏩</button>
@@ -105,15 +114,15 @@
 
       <!-- Apps -->
       <div class="row row-apps">
-        <button class="app-btn app-netflix" data-launch="12">Netflix</button>
-        <button class="app-btn app-youtube" data-launch="837">YouTube</button>
-        <button class="app-btn app-prime" data-launch="13">Prime Video</button>
-        <button class="app-btn app-disney" data-launch="291097">Disney+</button>
+        <button class="app-btn app-netflix" data-launch-roku="12" data-launch-dial="Netflix" data-launch-sony="netflix">Netflix</button>
+        <button class="app-btn app-youtube" data-launch-roku="837" data-launch-dial="YouTube">YouTube</button>
+        <button class="app-btn app-prime" data-launch-roku="13" data-launch-dial="AmazonInstantVideo">Prime Video</button>
+        <button class="app-btn app-disney" data-launch-roku="291097" data-launch-dial="Disney+">Disney+</button>
       </div>
 
       <!-- Teclado numérico -->
-      <button id="toggle-keypad" class="btn-link keypad-toggle">Mostrar teclado numérico ▾</button>
-      <div id="keypad" class="keypad hidden">
+      <button id="toggle-keypad" class="btn-link keypad-toggle ctrl-full">Mostrar teclado numérico ▾</button>
+      <div id="keypad" class="keypad hidden ctrl-full">
         <button class="key-num" data-key="Lit_1">1</button>
         <button class="key-num" data-key="Lit_2">2</button>
         <button class="key-num" data-key="Lit_3">3</button>
@@ -131,17 +140,22 @@
     </div>
 
     <p id="toast" class="toast hidden"></p>
-    <p class="footnote">Funciona melhor com TVs Roku. Veja o aviso de compatibilidade abaixo.</p>
+    <p id="footnote" class="footnote">Veja o aviso de compatibilidade abaixo.</p>
 
     <details class="compat">
       <summary>Aviso de compatibilidade</summary>
-      <p>Este app envia comandos reais via <strong>Roku ECP</strong> (protocolo oficial da Roku) diretamente do
-      seu navegador para o IP local da TV — sem precisar de servidor intermediário.</p>
-      <p>Para <strong>Samsung, LG e Android TV</strong>, o protocolo exige pareamento por WebSocket com token de
-      autenticação exclusivo de cada fabricante. O app tenta a conexão, mas nem toda TV/rede permite isso a
-      partir de um site em HTTPS (bloqueio de "conteúdo misto" do navegador).</p>
-      <p>Se os botões não responderem: acesse o site como <strong>http://</strong> em vez de
-      <strong>https://</strong>, ou abra as configurações do site no navegador e permita "conteúdo não seguro".</p>
+      <p><strong>Android TV / Google TV (genérico):</strong> usa o protocolo aberto <strong>DIAL</strong>, o mesmo
+      do Chromecast, para abrir apps direto na TV (Netflix, YouTube etc). Setas, volume e power não têm um
+      protocolo aberto por HTTP nesse modo genérico — por isso ficam esmaecidos na tela.</p>
+      <p><strong>Sony Bravia (Android TV):</strong> usa o protocolo oficial <strong>IRCC-IP</strong> da Sony, que
+      cobre setas, volume, canal, power e números de verdade, autenticado por uma chave PSK configurada na TV.</p>
+      <p><strong>Roku:</strong> usa o <strong>ECP</strong> (protocolo oficial da Roku) — funciona sem senha.</p>
+      <p><strong>Samsung:</strong> WebSocket local com pareamento — pode pedir para aceitar na tela da TV.</p>
+      <p><strong>LG (webOS):</strong> exige um token pareado pelo app oficial da LG, que uma página web comum não
+      consegue obter com segurança — por isso não está disponível aqui.</p>
+      <p>Todos os modos rodam direto do seu navegador para o IP local da TV — o servidor no Render nunca fala com
+      a TV. Se um botão não responder: confirme a mesma rede Wi-Fi, o IP e, se aparecer bloqueio de "conteúdo
+      misto" do HTTPS, permita "conteúdo não seguro" para este site nas configurações do navegador.</p>
     </details>
 
   </div>

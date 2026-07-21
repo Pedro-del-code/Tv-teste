@@ -11,12 +11,16 @@ local** que as próprias Smart TVs expõem:
 
 | Marca | Suporte | Como |
 |---|---|---|
-| **Roku / TVs com Roku TV** | ✅ Funciona de verdade | Protocolo oficial **ECP** (External Control Protocol) via HTTP, sem senha, direto do navegador para o IP da TV |
+| **Android TV / Google TV (genérico)** | ⚠️ Parcial — abre apps de verdade | Protocolo **DIAL** (o mesmo do Chromecast), via HTTP, sem pareamento. Não cobre setas/volume/power: não existe protocolo aberto por HTTP para isso em Android TV genérico |
+| **Sony Bravia (Android TV)** | ✅ Funciona de verdade | Protocolo oficial **IRCC-IP** da Sony via HTTP, autenticado com uma chave PSK que você cria na própria TV. Cobre setas, volume, canal, power e números |
+| **Roku / TVs com Roku TV** | ✅ Funciona de verdade | Protocolo oficial **ECP** (External Control Protocol) via HTTP, sem senha |
 | **Samsung (Tizen)** | ⚠️ Melhor esforço | WebSocket local com pareamento — a TV pode pedir para você aceitar a conexão na tela |
-| **LG (webOS) / Android TV / Google TV** | ❌ Não suportado por um site genérico | Exigem certificado/token pareado pelo app oficial do fabricante; não é possível replicar isso com segurança em uma página web comum |
+| **LG (webOS)** | ❌ Não suportado | Exige certificado/token pareado pelo app oficial da LG; não é possível replicar isso com segurança em uma página web comum |
 
-Ou seja: **funciona muito bem com Roku**. Para as outras marcas, o app tenta e avisa quando não
-consegue — ele nunca finge que um botão funcionou quando não funcionou.
+Se a sua TV é Android TV mas **não é Sony**, o app te deixa abrir os apps normalmente (Netflix, YouTube etc.)
+via DIAL, mas os botões de seta/volume/power ficam esmaecidos na tela porque, honestamente, não existe um
+protocolo aberto por HTTP para isso nesses aparelhos — o fabricante (TCL, Hisense, Philips, Nvidia Shield etc.)
+não expõe essa função pela rede sem um app/certificado próprio.
 
 ### Por que isso roda no navegador, e não no servidor do Render?
 
@@ -86,6 +90,9 @@ npm start
 ## Uso
 
 1. Abra o site pelo celular, na mesma rede Wi-Fi da TV.
-2. Selecione a marca e digite o IP local da TV.
-3. Toque em **Conectar**.
+2. Selecione a marca/plataforma:
+   - **Sony Bravia**: também informe a chave PSK (crie em Configurações → Rede → Config. de rede
+     doméstica → Controle IP na própria TV).
+   - **Android TV genérico**: sem PSK, mas lembre que só os botões de app funcionam de verdade.
+3. Digite o IP local da TV e toque em **Conectar**.
 4. Use o controle: D-pad, volume, canal, apps, teclado numérico, etc.
