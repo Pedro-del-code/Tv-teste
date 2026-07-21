@@ -16,7 +16,8 @@
 
       <label class="field-label" for="tv-brand">Marca / plataforma da TV</label>
       <select id="tv-brand" class="field-input">
-        <option value="androidtv">Android TV / Google TV (genérico)</option>
+        <option value="philco">Android TV com pareamento (Philco / Shield / TCL / genérico)</option>
+        <option value="androidtv">Android TV / Google TV (sem ponte, só abre apps)</option>
         <option value="sony">Sony Bravia (Android TV)</option>
         <option value="roku">Roku / TV com Roku TV</option>
         <option value="samsung">Samsung (Tizen)</option>
@@ -24,6 +25,11 @@
       </select>
 
       <div id="cap-badge" class="cap-badge"></div>
+
+      <div id="bridge-group" class="hidden">
+        <label class="field-label" for="bridge-addr">Endereço da ponte local</label>
+        <input id="bridge-addr" class="field-input" type="text" value="http://localhost:4000" autocomplete="off">
+      </div>
 
       <label class="field-label" for="tv-ip">IP local da TV</label>
       <input id="tv-ip" class="field-input" type="text" inputmode="decimal" placeholder="Ex: 192.168.0.15" autocomplete="off">
@@ -35,9 +41,18 @@
 
       <button id="btn-connect" class="btn-primary">Conectar</button>
 
+      <div id="pair-group" class="hidden">
+        <label class="field-label" for="pair-code">Código exibido na TV</label>
+        <input id="pair-code" class="field-input" type="text" inputmode="numeric" placeholder="Ex: 123456" autocomplete="off">
+        <button id="btn-pair" class="btn-primary btn-secondary">Confirmar pareamento</button>
+      </div>
+
       <button id="btn-help" class="btn-link">Como encontro o IP da minha TV?</button>
 
       <div id="help-box" class="help-box hidden">
+        <p><strong>Philco / Android TV com pareamento:</strong> requer a ponte local (pasta
+        <code>bridge/</code>) rodando no seu computador — veja o README dela. A TV mostra um
+        código de pareamento na tela na primeira conexão.</p>
         <p><strong>Android TV / Google TV:</strong> Configurações → Rede e Internet → veja o IP conectado.</p>
         <p><strong>Sony Bravia:</strong> Configurações → Rede → Config. de rede doméstica → Controle IP → defina Autenticação como "Normal e Chave Pré-Compartilhada" e crie uma PSK (ex: 0000). O IP fica na mesma tela de Rede.</p>
         <p><strong>Roku:</strong> Configurações → Rede → Sobre.</p>
@@ -144,18 +159,23 @@
 
     <details class="compat">
       <summary>Aviso de compatibilidade</summary>
-      <p><strong>Android TV / Google TV (genérico):</strong> usa o protocolo aberto <strong>DIAL</strong>, o mesmo
-      do Chromecast, para abrir apps direto na TV (Netflix, YouTube etc). Setas, volume e power não têm um
-      protocolo aberto por HTTP nesse modo genérico — por isso ficam esmaecidos na tela.</p>
+      <p><strong>Android TV com pareamento (Philco/Shield/TCL/genérico):</strong> usa o protocolo
+      oficial <strong>Android TV Remote v2</strong> da Google (o mesmo que mostra código na tela).
+      Esse protocolo é TCP+TLS, algo que nenhum navegador consegue abrir — por isso esse modo
+      depende de uma <strong>ponte local</strong> (pasta <code>bridge/</code>, roda com
+      <code>npm start</code> na sua rede). Com a ponte rodando, o controle é completo de verdade.</p>
+      <p><strong>Android TV / Google TV (sem ponte):</strong> usa o protocolo aberto <strong>DIAL</strong>, o mesmo
+      do Chromecast, só para abrir apps direto na TV (Netflix, YouTube etc). Setas, volume e power não têm um
+      protocolo aberto por HTTP nesse modo — por isso ficam esmaecidos na tela.</p>
       <p><strong>Sony Bravia (Android TV):</strong> usa o protocolo oficial <strong>IRCC-IP</strong> da Sony, que
       cobre setas, volume, canal, power e números de verdade, autenticado por uma chave PSK configurada na TV.</p>
       <p><strong>Roku:</strong> usa o <strong>ECP</strong> (protocolo oficial da Roku) — funciona sem senha.</p>
       <p><strong>Samsung:</strong> WebSocket local com pareamento — pode pedir para aceitar na tela da TV.</p>
       <p><strong>LG (webOS):</strong> exige um token pareado pelo app oficial da LG, que uma página web comum não
       consegue obter com segurança — por isso não está disponível aqui.</p>
-      <p>Todos os modos rodam direto do seu navegador para o IP local da TV — o servidor no Render nunca fala com
-      a TV. Se um botão não responder: confirme a mesma rede Wi-Fi, o IP e, se aparecer bloqueio de "conteúdo
-      misto" do HTTPS, permita "conteúdo não seguro" para este site nas configurações do navegador.</p>
+      <p>Sem contar a ponte local (que roda em Node.js), tudo sai direto do seu navegador para o IP local da TV —
+      o servidor no Render nunca fala com a TV. Se um botão não responder: confirme a mesma rede Wi-Fi, o IP e,
+      se aparecer bloqueio de "conteúdo misto" do HTTPS, permita "conteúdo não seguro" para este site.</p>
     </details>
 
   </div>

@@ -11,16 +11,18 @@ local** que as próprias Smart TVs expõem:
 
 | Marca | Suporte | Como |
 |---|---|---|
-| **Android TV / Google TV (genérico)** | ⚠️ Parcial — abre apps de verdade | Protocolo **DIAL** (o mesmo do Chromecast), via HTTP, sem pareamento. Não cobre setas/volume/power: não existe protocolo aberto por HTTP para isso em Android TV genérico |
+| **Android TV com pareamento (Philco / Shield / TCL / genérico)** | ✅ Funciona de verdade, com uma peça extra | Protocolo oficial **Android TV Remote v2** (o que pede código na tela). Requer a **ponte local** em `bridge/` (não dá pra rodar isso no Render — veja `bridge/README.md`) |
+| **Android TV / Google TV (sem ponte)** | ⚠️ Parcial — abre apps de verdade | Protocolo **DIAL** (o mesmo do Chromecast), via HTTP, sem pareamento. Não cobre setas/volume/power |
 | **Sony Bravia (Android TV)** | ✅ Funciona de verdade | Protocolo oficial **IRCC-IP** da Sony via HTTP, autenticado com uma chave PSK que você cria na própria TV. Cobre setas, volume, canal, power e números |
 | **Roku / TVs com Roku TV** | ✅ Funciona de verdade | Protocolo oficial **ECP** (External Control Protocol) via HTTP, sem senha |
 | **Samsung (Tizen)** | ⚠️ Melhor esforço | WebSocket local com pareamento — a TV pode pedir para você aceitar a conexão na tela |
 | **LG (webOS)** | ❌ Não suportado | Exige certificado/token pareado pelo app oficial da LG; não é possível replicar isso com segurança em uma página web comum |
 
-Se a sua TV é Android TV mas **não é Sony**, o app te deixa abrir os apps normalmente (Netflix, YouTube etc.)
-via DIAL, mas os botões de seta/volume/power ficam esmaecidos na tela porque, honestamente, não existe um
-protocolo aberto por HTTP para isso nesses aparelhos — o fabricante (TCL, Hisense, Philips, Nvidia Shield etc.)
-não expõe essa função pela rede sem um app/certificado próprio.
+**Se sua TV pede um código de pareamento na tela (caso da Philco)**: isso é o protocolo oficial
+"Android TV Remote v2" da Google. Ele usa um socket TCP com TLS, que **nenhum navegador consegue
+abrir** — não é algo que dê pra contornar só no front-end. Por isso incluí a pasta `bridge/`: um
+servidorzinho Node.js que roda na sua rede local, fala esse protocolo de verdade, e expõe isso como
+HTTP simples para o site. Veja `bridge/README.md` para instalar e rodar.
 
 ### Por que isso roda no navegador, e não no servidor do Render?
 
@@ -50,6 +52,7 @@ script.js       → lógica de conexão e envio de comandos
 render.yaml     → configuração para deploy automático no Render (Static Site)
 package.json    → só necessário se você preferir o modo "Web Service" (Node)
 server.js       → servidor Express simples, alternativa ao Static Site
+bridge/         → ponte local p/ Android TV com pareamento (Philco etc.) — roda na sua rede, não no Render
 ```
 
 ## Deploy no Render (recomendado: Static Site)

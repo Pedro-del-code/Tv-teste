@@ -59,6 +59,7 @@ html,body{
   cursor:pointer; letter-spacing:.3px;
 }
 .btn-primary:active{transform:translateY(1px);}
+.btn-secondary{background:var(--key-hi); color:var(--ink); margin-top:10px;}
 
 .btn-link{
   display:block; width:100%; text-align:center; background:none; border:none;
